@@ -1,0 +1,25 @@
+---
+import { db, NavigationTable } from "astro:db";
+const links = await db.select().from(NavigationTable);
+---
+
+<nav role="navigation">
+  <ul>
+    { 
+      links.map((link) => (
+        <li>
+          <a href={link.url}>
+            {link.name}
+            {link.description}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
+
+<style>
+  ul li {
+    display: inline-block;
+  }
+</style>

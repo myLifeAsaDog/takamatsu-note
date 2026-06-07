@@ -1,0 +1,64 @@
+---
+import type { WeatherForecast } from './weather';
+import { db, inArray, WeatherTable } from 'astro:db';
+import { formatDateToParts } from '../../functions/dateFormatter';
+
+const WEATHER_API = 'https://www.jma.go.jp/bosai/forecast/data/forecast/370000.json';
+
+const result = await fetch(WEATHER_API);
+const resultJson = await result.json();
+const weather = resultJson[0] as WeatherForecast;
+const weatherCodes = weather.timeSeries[0].areas[0].weatherCodes.slice(0, 2);
+const temps = {
+  min: weather.timeSeries[2].areas[0].temps[0],
+  max: weather.timeSeries[2].areas[0].temps[1],
+};
+const pops = {
+  today: weather.timeSeries[1].areas[0].pops[0],
+  0: weather.timeSeries[1].areas[0].pops[1],
+  6: weather.timeSeries[1].areas[0].pops[2],
+  12: weather.timeSeries[1].areas[0].pops[3],
+  18: weather.timeSeries[1].areas[0].pops[4],
+};
+
+/** weatherCodes に存在するものだけを取得 */
+const weatherLabelRows = await db
+  .select({ code: WeatherTable.code, name: WeatherTable.name, image: WeatherTable.image })
+  .from(WeatherTable)
+  .where(inArray(WeatherTable.code, weatherCodes));
+
+/* { '100': '晴れ' } みたいなデータ形式に変換してます */
+const weatherCodeMap = Object.fromEntries(
+  weatherLabelRows.map((row) => [`${row.code}`, { name: row.name, image: row.image }])
+);
+
+const reportDate = formatDateToParts(weather.reportDatetime);
+---
+
+<div>
+  <h2>高松の天気</h2>
+  <ul>
+    <li>
+      <p>今日の天気</p>
+      <img
+        src={`https://www.jma.go.jp/bosai/forecast/img/${weatherCodeMap[`${weatherCodes[0]}`].image}`}
+        alt={weatherCodeMap[`${weatherCodes[0]}`].name}
+      />
+      <p>{weatherCodeMap[`${weatherCodes[0]}`].name ?? '不明'}</p>
+      <p>気温 {temps.min}&#8451;/{temps.max}&#8451;</p>
+      <p>降水確率：{pops.today ?? '不明'} &percnt;</p>
+    </li>
+    <li>
+      <img
+        src={`https://www.jma.go.jp/bosai/forecast/img/${weatherCodeMap[`${weatherCodes[1]}`].image}`}
+        alt={weatherCodeMap[`${weatherCodes[1]}`].name}
+      /><p>明日: {weatherCodeMap[`${weatherCodes[1]}`].name ?? '不明'}</p>
+      <p>
+        降水確率：{pops['0'] ?? '不明'} &percnt;{pops['6'] ?? '不明'} &percnt;{pops['12'] ?? '不明'} &percnt;{
+          pops['18'] ?? '不明'
+        } &percnt;
+      </p>
+    </li>
+  </ul>
+  <p>Updated at {reportDate.date} {reportDate.time}</p>
+</div>

@@ -1,0 +1,60 @@
+---
+import { db, NavigationTable } from 'astro:db';
+const links = await db.select().from(NavigationTable);
+---
+
+<header>
+  <div class="header-inner">
+    <div class="header-logo">
+      <a href="/"
+        ><h2>TAKAMATSU NOTE</h2>
+        <p>Takamatsu is difference from yesterday</p>
+      </a>
+    </div>
+
+    <ul class="header-nav">
+      {
+        links.map((link) => (
+          <li>
+            <a href={link.url}>{link.name}</a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</header>
+
+<style>
+  header {
+    .header-inner {
+      display: flex;
+      justify-content: space-between;
+      padding: 20px;
+      margin: 0 auto;
+      width: var(--content-width);
+    }
+    .header-logo {
+      h2 {
+        margin: 0 0 6px 0;
+        font-size: 20px;
+      }
+      p {
+        font-size: 13px;
+      }
+    }
+    .header-nav {
+      display: flex;
+      align-items: flex-end;
+
+      li {
+        margin: 0 5px;
+        a {
+          font-size: 14px;
+        }
+        a:hover {
+          border-bottom: solid 2px var(--main-white);
+        }
+      }
+    }
+  }
+</style>

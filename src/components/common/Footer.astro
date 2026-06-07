@@ -1,0 +1,49 @@
+---
+const today = new Date();
+---
+
+<footer>
+  <div class="footer-inner">
+    <ul>
+      <li><a href="/about">運営について</a></li>
+      <li><a href="#">プライバシーポリシー</a></li>
+      <li><a href="#">お問い合わせ</a></li>
+    </ul>
+    <p>&copy; {today.getFullYear()} TAKAMATSU NOTE All rights reserved.</p>
+  </div>
+</footer>
+
+<style>
+  footer {
+    position: sticky;
+    top: 100vh;
+    padding: 40px 0;
+    background: var(--footer-blue-zodiac);
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 0 auto;
+      width: var(--content-width);
+
+      ul {
+        display: flex;
+
+        li {
+          margin: 0 5px;
+
+          a {
+            font-size: 14px;
+          }
+          a:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+      p {
+        font-size: 12px;
+      }
+    }
+  }
+</style>

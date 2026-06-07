@@ -1,0 +1,63 @@
+---
+import '../styles/destyle.css';
+import Header from '../components/common/Header.astro';
+import Navigation from '../components/common/Navigation.astro';
+import Sidebar from '../components/sidebar/Sidebar.astro';
+import Footer from '../components/common/Footer.astro';
+interface Props {
+  title: string;
+  description: string;
+  isHero?: boolean;
+  isNoIndex?: boolean;
+}
+const props = Astro.props;
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    {props.isNoIndex && <meta name="robots" content="noindex" />}
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{props.title}</title>
+    <meta name="description" content={props.description} />
+  </head>
+  <body>
+    <Header />
+    {props.isHero && <Navigation />}
+    <div class="main-container">
+      <main class="main-content">
+        <div class="content">
+          <slot />
+        </div>
+      </main>
+      <aside class="sidebar">
+        <Sidebar />
+      </aside>
+    </div>
+    <Footer />
+  </body>
+</html>
+
+<style>
+  .main-container {
+    display: flex;
+    margin: 0 auto;
+    width: var(--content-width);
+  }
+  .main-content {
+    padding: 0 20px 60px 20px;
+    width: 700px;
+    .content {
+      padding: 20px;
+      background: var(--main-white);
+      color: var(--main-black);
+    }
+  }
+  .sidebar {
+    width: 260px;
+  }
+</style>

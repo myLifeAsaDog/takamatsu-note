@@ -1,0 +1,13 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Layout from './Layout.astro';
+
+type Props = CollectionEntry<'articleCollection'>['data'];
+
+const props = Astro.props;
+---
+
+<Layout title={`TAKAMATSU-NOTE | ${props.title}`} description="">
+  <h1>{props.title}</h1>
+  <slot />
+</Layout>

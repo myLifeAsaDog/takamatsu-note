@@ -1,0 +1,16 @@
+---
+import { db, AreaTable } from "astro:db";
+
+const areas = await db.select().from(AreaTable);
+---
+
+<div>
+  <h2>注目エリア</h2>
+  <ul>
+    {
+      areas.map((area) => {
+        return <li>{area.name}</li>;
+      })
+    }
+  </ul>
+</div>
