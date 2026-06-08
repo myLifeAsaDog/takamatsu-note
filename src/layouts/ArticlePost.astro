@@ -1,13 +1,86 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import Layout from './Layout.astro';
+import FormattedDate from '../components/FormattedDate.astro';
 
-type Props = CollectionEntry<'articleCollection'>['data'];
+type Props = CollectionEntry<'articleCollection'>['data'] & { slug: string };
 
 const props = Astro.props;
 ---
 
 <Layout title={`TAKAMATSU-NOTE | ${props.title}`} description="">
-  <h1>{props.title}</h1>
-  <slot />
+  <ol class="bread-crumbs">
+    <li><a href="/">TOP</a></li>
+    <li><a href={`/${props.category}`}>{props.category.toUpperCase()}</a></li>
+    <li><a href={`/${props.category}/${props.slug}`}>{props.title}</a></li>
+  </ol>
+  <article>
+    <div class="article-meta">
+      <p class="category">{props.category.toUpperCase()}</p>
+      <p class="category">{props.spot}</p>
+      <FormattedDate date={props.publishDate} />
+    </div>
+    <h1>{props.title}</h1>
+    <img width="100%" src={props.thumbnail?.src} alt={props.title} />
+    <div class="article-body">
+      <slot />
+    </div>
+  </article>
 </Layout>
+
+<style>
+  .bread-crumbs {
+    display: flex;
+    margin: 0 0 30px 0;
+
+    li::after {
+      content: '/';
+      margin: 0 2px;
+    }
+    li:last-of-type::after {
+      content: '';
+    }
+    li {
+      a {
+        font-size: 14px;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+  .article-meta {
+    display: flex;
+    align-items: center;
+    margin: 0 0 20px 0;
+
+    .category {
+      margin: 0 10px 0 0;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 13px;
+      line-height: 16px;
+      background: var(--main-tory-blue);
+      color: var(--main-white);
+    }
+    time {
+      font-size: 13px;
+    }
+  }
+  h1 {
+    margin: 0 0 16px 0;
+    font-size: 24px;
+    font-weight: bold;
+  }
+  .article-body {
+    line-height: 1.5;
+
+    h2 {
+      margin: 10px 0;
+      font-weight: bold;
+    }
+    p {
+      margin: 0 0 1em 0;
+    }
+  }
+</style>

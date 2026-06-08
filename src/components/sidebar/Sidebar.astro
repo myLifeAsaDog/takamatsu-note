@@ -4,8 +4,26 @@ import Areas from './Areas.astro';
 import Links from './Links.astro';
 ---
 
-<Weather />
-<Areas />
-<Links />
-<div><a href="/providing-information">情報提供求む</a></div>
-<div><a href="#">広告を掲載しませんか？</a></div>
+<div class="sidebar-box">
+  <Weather />
+</div>
+<div class="sidebar-box">
+  <Areas />
+</div>
+<div class="sidebar-box">
+  <Links />
+</div>
+<div class="sidebar-box">
+  <div><a href="/providing-information">情報提供求む</a></div>
+  <div><a href="#">広告を掲載しませんか？</a></div>
+</div>
+
+<style>
+  .sidebar-box {
+    margin: 0 0 16px 0;
+    padding: 16px;
+    border-radius: 6px;
+    background: var(--main-white);
+    color: var(--main-black);
+  }
+</style>
