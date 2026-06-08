@@ -10,15 +10,15 @@ const resultJson = await result.json();
 const weather = resultJson[0] as WeatherForecast;
 const weatherCodes = weather.timeSeries[0].areas[0].weatherCodes.slice(0, 2);
 const temps = {
-  min: weather.timeSeries[2].areas[0].temps[0],
-  max: weather.timeSeries[2].areas[0].temps[1],
+  min: weather.timeSeries[2].areas[0].temps[0] ?? '--',
+  max: weather.timeSeries[2].areas[0].temps[1] ?? '--',
 };
 const pops = {
-  today: weather.timeSeries[1].areas[0].pops[0],
-  0: weather.timeSeries[1].areas[0].pops[1],
-  6: weather.timeSeries[1].areas[0].pops[2],
-  12: weather.timeSeries[1].areas[0].pops[3],
-  18: weather.timeSeries[1].areas[0].pops[4],
+  today: weather.timeSeries[1].areas[0].pops[0] ?? '--',
+  0: weather.timeSeries[1].areas[0].pops[1] ?? '--',
+  6: weather.timeSeries[1].areas[0].pops[2] ?? '--',
+  12: weather.timeSeries[1].areas[0].pops[3] ?? '--',
+  18: weather.timeSeries[1].areas[0].pops[4] ?? '--',
 };
 
 /** weatherCodes に存在するものだけを取得 */
@@ -33,6 +33,10 @@ const weatherCodeMap = Object.fromEntries(
 );
 
 const reportDate = formatDateToParts(weather.reportDatetime);
+const defaultWeather = {
+  name: '不明',
+  image: '100.svg', // 万が一のときのデフォルト画像（例: 晴れ）
+};
 ---
 
 <div>
@@ -41,18 +45,19 @@ const reportDate = formatDateToParts(weather.reportDatetime);
     <li>
       <p>今日の天気</p>
       <img
-        src={`https://www.jma.go.jp/bosai/forecast/img/${weatherCodeMap[`${weatherCodes[0]}`].image}`}
-        alt={weatherCodeMap[`${weatherCodes[0]}`].name}
+        src={`https://www.jma.go.jp/bosai/forecast/img/${weatherCodeMap[`${weatherCodes[0]}`]?.image ?? defaultWeather.image}`}
+        alt={weatherCodeMap[`${weatherCodes[0]}`]?.name ?? defaultWeather.name}
       />
-      <p>{weatherCodeMap[`${weatherCodes[0]}`].name ?? '不明'}</p>
+      <p>{weatherCodeMap[`${weatherCodes[0]}`]?.name ?? '不明'}</p>
       <p>気温 {temps.min}&#8451;/{temps.max}&#8451;</p>
       <p>降水確率：{pops.today ?? '不明'} &percnt;</p>
     </li>
     <li>
       <img
-        src={`https://www.jma.go.jp/bosai/forecast/img/${weatherCodeMap[`${weatherCodes[1]}`].image}`}
-        alt={weatherCodeMap[`${weatherCodes[1]}`].name}
-      /><p>明日: {weatherCodeMap[`${weatherCodes[1]}`].name ?? '不明'}</p>
+        src={`https://www.jma.go.jp/bosai/forecast/img/${weatherCodeMap[`${weatherCodes[1]}`]?.image ?? defaultWeather.image}`}
+        alt={weatherCodeMap[`${weatherCodes[1]}`]?.name ?? defaultWeather.name}
+      />
+      <p>明日: {weatherCodeMap[`${weatherCodes[1]}`]?.name ?? '不明'}</p>
       <p>
         降水確率：{pops['0'] ?? '不明'} &percnt;{pops['6'] ?? '不明'} &percnt;{pops['12'] ?? '不明'} &percnt;{
           pops['18'] ?? '不明'

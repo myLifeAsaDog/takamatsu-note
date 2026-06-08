@@ -1,0 +1,29 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  url: ImageMetadata | string;
+  alt: string;
+  width?: number;
+}
+
+const { url, alt, width } = Astro.props;
+const isLocalImage = typeof url === 'object' && url !== null;
+---
+
+{
+  isLocalImage ? (
+    <Image src={url} alt={alt} width={width} class="responsive-img" />
+  ) : (
+    <img src={url} alt={alt} width={width ?? '100%'} class="responsive-img" />
+  )
+}
+
+<style>
+  .responsive-img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+</style>

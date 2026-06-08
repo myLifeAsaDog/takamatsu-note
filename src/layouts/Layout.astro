@@ -1,13 +1,13 @@
 ---
-import '../styles/destyle.css';
+import '../styles/global.css';
 import Header from '../components/common/Header.astro';
-import Navigation from '../components/common/Navigation.astro';
+import Navigation from '../components/top/Navigation.astro';
 import Sidebar from '../components/sidebar/Sidebar.astro';
 import Footer from '../components/common/Footer.astro';
 interface Props {
   title: string;
   description: string;
-  isHero?: boolean;
+  isTop?: boolean;
   isNoIndex?: boolean;
 }
 const props = Astro.props;
@@ -27,12 +27,20 @@ const props = Astro.props;
   </head>
   <body>
     <Header />
-    {props.isHero && <Navigation />}
+    {props.isTop && <Navigation />}
     <div class="main-container">
       <main class="main-content">
-        <div class="content">
-          <slot />
-        </div>
+        {
+          props.isTop ? (
+            <div class="top-content">
+              <slot />
+            </div>
+          ) : (
+            <div class="content">
+              <slot />
+            </div>
+          )
+        }
       </main>
       <aside class="sidebar">
         <Sidebar />
@@ -56,6 +64,11 @@ const props = Astro.props;
       border-radius: 8px;
       background: var(--main-white);
       color: var(--main-black);
+    }
+    .top-content {
+      h2 {
+        margin: 20px 0;
+      }
     }
   }
   .sidebar {
