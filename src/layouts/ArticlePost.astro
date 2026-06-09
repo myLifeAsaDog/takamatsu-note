@@ -22,7 +22,8 @@ const props = Astro.props;
     </div>
     <h1>{props.title}</h1>
     <figure class="header-image">
-      <ImageLoader url={props.thumbnail ?? ''} alt={props.title} />
+      <ImageLoader url={props.image ?? ''} alt={props.title} />
+      {props.credit && <figcaption>credit:{props.credit}</figcaption>}
     </figure>
     <div class="article-body">
       <slot />

@@ -14,7 +14,8 @@ const articleCollection = defineCollection({
   schema: ({ image }) =>
     z.object({
       title: z.string(),
-      thumbnail: z.union([image(), z.url()]).optional(),
+      image: z.union([image(), z.url()]).optional(),
+      credit: z.string().optional(),
       category: z.enum(CategoryEnum),
       spot: z.enum(SpotEnum),
       publishDate: z.coerce.date(),

@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import { ClientRouter } from 'astro:transitions';
 import Header from '../components/common/Header.astro';
 import Navigation from '../components/top/Navigation.astro';
 import Sidebar from '../components/sidebar/Sidebar.astro';
@@ -24,6 +25,7 @@ const props = Astro.props;
     <meta name="generator" content={Astro.generator} />
     <title>{props.title}</title>
     <meta name="description" content={props.description} />
+    <ClientRouter />
   </head>
   <body>
     <Header />
