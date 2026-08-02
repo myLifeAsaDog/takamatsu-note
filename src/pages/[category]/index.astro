@@ -15,17 +15,22 @@ const articles = (await getCollection('articleCollection')).filter(
 const openArticles = articles.sort(
   (a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf()
 );
+
 const categoryName = CATEGORY_TABLE.filter((item) => item.slug === category);
 ---
 
 <Layout title="" description="">
+  <ol class="bread-crumbs">
+    <li><a href="/">TOP</a></li>
+    <li><a href={`/${categoryName[0].slug}`}>{categoryName[0].slug.toUpperCase()}</a></li>
+  </ol>
   <section>
     <h1>高松市の「{categoryName[0].name}」情報一覧</h1>
     <ul>
       {
         openArticles.map((post) => (
           <li>
-            <a href={`/open/${post.id}/`}>
+            <a href={`/${categoryName[0].slug}/${post.id}/`}>
               <h4 class="title">{post.data.title}</h4>
             </a>
           </li>

@@ -259,3 +259,27 @@ th {
   text-align: left;
   font-weight: 700
 }
+
+.bread-crumbs {
+  display: flex;
+  margin: 0 0 30px 0;
+
+  li::after {
+    content: '/';
+    margin: 0 2px;
+  }
+
+  li:last-of-type::after {
+    content: '';
+  }
+
+  li {
+    a {
+      font-size: 14px;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  }
+}

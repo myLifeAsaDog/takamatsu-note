@@ -1,11 +1,22 @@
 ---
+import { getImage } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 import Layout from './Layout.astro';
 import ImageLoader from '../components/ImageLoader.astro';
 import FormattedDate from '../components/FormattedDate.astro';
+import cameraImage from '../assets/images/ico_camera.png';
 
 type Props = CollectionEntry<'articleCollection'>['data'] & { slug: string };
 const props = Astro.props;
+
+const optimizeImage = await getImage({
+  src: cameraImage,
+  width: 14,
+  height: 14,
+  format: 'webp',
+  quality: 100,
+});
+const cameraIcon = `url(${optimizeImage.src})`;
 ---
 
 <Layout title={`TAKAMATSU-NOTE | ${props.title}`} description="">
@@ -23,7 +34,7 @@ const props = Astro.props;
     <h1>{props.title}</h1>
     <figure class="header-image">
       <ImageLoader url={props.image ?? ''} alt={props.title} />
-      {props.credit && <figcaption>credit:{props.credit}</figcaption>}
+      {props.credit && <figcaption>{props.credit}</figcaption>}
     </figure>
     <div class="article-body">
       <slot />
@@ -31,27 +42,7 @@ const props = Astro.props;
   </article>
 </Layout>
 
-<style>
-  .bread-crumbs {
-    display: flex;
-    margin: 0 0 30px 0;
-
-    li::after {
-      content: '/';
-      margin: 0 2px;
-    }
-    li:last-of-type::after {
-      content: '';
-    }
-    li {
-      a {
-        font-size: 14px;
-      }
-      a:hover {
-        text-decoration: underline;
-      }
-    }
-  }
+<style define:vars={{ cameraIcon }}>
   .article-meta {
     display: flex;
     align-items: center;
@@ -76,7 +67,28 @@ const props = Astro.props;
     font-weight: bold;
   }
   .header-image {
+    position: relative;
     margin: 0 0 20px 0;
+
+    figcaption {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      padding: 5px 10px;
+      font-size: 13px;
+      color: var(--main-white);
+      background: rgba(0, 0, 0, 0.3);
+    }
+    figcaption::before {
+      content: '';
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      margin: 0 3px 0 0;
+      background-image: var(--cameraIcon);
+      background-repeat: no-repeat;
+      background-position: center left;
+    }
   }
   .article-body {
     line-height: 1.5;
